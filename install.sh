@@ -24,8 +24,11 @@ link_file() {
 
 link_file "$repo_dir/.zshrc" "$HOME/.zshrc"
 link_file "$repo_dir/.gitconfig" "$HOME/.gitconfig"
-mkdir -p "$HOME/.config"
-link_file "$repo_dir/starship.toml" "$HOME/.config/starship.toml"
+link_file "$repo_dir/.vimrc" "$HOME/.vimrc"
+
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  git clone --depth 1 https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
+fi
 
 data_dir=${XDG_DATA_HOME:-$HOME/.local/share}
 fzf_dir="$data_dir/fzf"
@@ -41,14 +44,6 @@ fi
 
 if [ ! -d "$autosuggestions_dir" ]; then
   git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git "$autosuggestions_dir"
-fi
-
-if [ ! -x "$HOME/.local/bin/starship" ]; then
-  mkdir -p "$HOME/.local/bin"
-  installer=$(mktemp)
-  curl -fsSL https://starship.rs/install.sh -o "$installer"
-  sh "$installer" --bin-dir "$HOME/.local/bin" --yes
-  rm -f "$installer"
 fi
 
 if [ ! -x "$HOME/.local/bin/zoxide" ]; then
