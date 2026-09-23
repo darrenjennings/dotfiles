@@ -21,3 +21,19 @@ for name in .zshrc .gitconfig; do
   ln -s "$source_file" "$target_file"
   printf 'Linked %s to %s\n' "$target_file" "$source_file"
 done
+
+data_dir=${XDG_DATA_HOME:-$HOME/.local/share}
+fzf_dir="$data_dir/fzf"
+autosuggestions_dir="$data_dir/zsh/plugins/zsh-autosuggestions"
+
+mkdir -p "$data_dir/zsh/plugins"
+if [ ! -d "$fzf_dir" ]; then
+  git clone --depth 1 https://github.com/junegunn/fzf.git "$fzf_dir"
+fi
+if [ ! -x "$fzf_dir/bin/fzf" ]; then
+  "$fzf_dir/install" --bin
+fi
+
+if [ ! -d "$autosuggestions_dir" ]; then
+  git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git "$autosuggestions_dir"
+fi
